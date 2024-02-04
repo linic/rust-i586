@@ -1,0 +1,5 @@
+services:
+  rust-i586:
+    image: linichotmailca/rust-i586:${RUST_I586_VERSION:-latest}
+    build: .
+
