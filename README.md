@@ -15,8 +15,9 @@ To copy the `tar.gz`in which the installer is:
 ## Note
 The build takes about 2 hours on a 10 years old 8 cores CPU with a 2TB SSD.
 
-## Note 2
-[linic/docker-tcl-core-x86](https://github.com/linic/docker-tcl-core-x86) may also be relevant.
+# May also be relevant...
+- [linic/docker-tcl-core-x86](https://github.com/linic/docker-tcl-core-x86)
+- [Tiny Core Linux Forum - IBM ThinkPad 560Z Core Project Pentium II](http://forum.tinycorelinux.net/index.php/topic,26359.msg170383.html#msg170383)
 
 # Docker Image
 You can find one here 
