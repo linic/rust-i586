@@ -17,3 +17,5 @@ The build takes about 2 hours on a 10 years old 8 cores CPU with a 2TB SSD.
 ## Note 2
 [linic/docker-tcl-core-x86](https://github.com/linic/docker-tcl-core-x86) may also be relevant.
 
+# Docker Image
+You can find one here [https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general](https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general)
