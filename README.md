@@ -11,7 +11,7 @@ To move around and look what was generated:
 To copy the `tar.gz`in which the installer is:
 `sudo docker cp rust-i586-rust-i586-1:/rust/build/dist/rust-nightly-i586-unknown-linux-gnu.tar.gz .`
 
-## Note 
+## Note
 The build takes about 2 hours on a 10 years old 8 cores CPU with a 2TB SSD.
 
 ## Note 2
