@@ -2,7 +2,7 @@ FROM debian:latest
 ARG CPU_CORES=8
 WORKDIR /tmp/
 RUN apt update
-RUN apt dist-upgrade
+RUN apt dist-upgrade --yes
 RUN dpkg --add-architecture i386
 RUN apt update
 COPY apt_packages.txt .

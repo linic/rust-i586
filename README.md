@@ -15,15 +15,23 @@ To copy the `tar.gz`in which the installer is:
 ## Note
 The build takes about 2 hours on a 10 years old 8 cores CPU with a 2TB SSD.
 
-# May also be relevant...
+# How to use this with retro computers?
+When used with the following:
 - [linic/docker-tcl-core-x86](https://github.com/linic/docker-tcl-core-x86)
+- [linic/openssl-i586](https://github.com/linic/openssl-i586)
+it's possible to build an image of Tiny Core Linux which somewhat replicates what would run on a
+Pentium II laptop such as the IBM 560Z. This is the image:
+- [linic/tcl-core-rust-i586](https://github.com/linic/tcl-core-rust-i586)
+
+After that, it's much easier to deploy rust on a Pentium II laptop with a recent Linux kernel
+provided by Tiny Core Linux. Building will still be very slow, but since we have a fully functional
+docker image with the same compiler, it should be possible to build on a more powerful machine via
+the docker container and then `docker cp` the binaries out of the container.
+
+# May also be relevant...
 - [Tiny Core Linux Forum - IBM ThinkPad 560Z Core Project Pentium II](http://forum.tinycorelinux.net/index.php/topic,26359.msg170383.html#msg170383)
 
 # Docker Image
 You can find one here 
 [https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general](https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general)
 
-# TODO
-Create another repo and corresponding image for `libssl.so.1.1` and `libcrypto.so.1.1` needed by 
-[linichotmailca/tcl-core-x86](https://hub.docker.com/repository/docker/linichotmailca/tcl-core-x86/general) to run `cargo new` 
-and then make a repo to generate `tcl-core-rust-i586` image which will have a rust dev environment to build rust programs for i586 CPUs.
