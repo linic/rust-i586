@@ -3,5 +3,6 @@
 # I later found this thread discussing miri https://github.com/rust-lang/rust/issues/100134
 # I'm now addding the following line to config.toml from the Dockerfile.
 # An example about how to configure tools is found in config.example.toml. I may need to adjust that if the value change in the future.
+[build]
 tools = ["cargo", "clippy", "rustdoc", "rustfmt", "rust-analyzer", "rust-analyzer-proc-macro-srv", "analysis", "src", "rust-demangler"]
 

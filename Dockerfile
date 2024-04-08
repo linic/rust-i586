@@ -17,13 +17,11 @@ ENV CXXFLAGS="-march=pentium"
 ENV RUST_BACKTRACE=full
 RUN ./configure --set build.extended=true --set build.build=i686-unknown-linux-gnu \
     --set build.host=i586-unknown-linux-gnu --set build.target=i586-unknown-linux-gnu \
+# See the comment in config.additional_settings.toml for more details about why tools is set here.
+    --set build.tools='["cargo", "clippy", "rustdoc", "rustfmt", "rust-analyzer", "rust-analyzer-proc-macro-srv", "analysis", "src", "rust-demangler"]' \
     --set llvm.cflags="-lz -fcf-protection=none" --set llvm.cxxflags="-lz -fcf-protection=none" \
     --set llvm.ldflags="-lz -fcf-protection=none" --set llvm.targets=X86 \
     --set llvm.download-ci-llvm=false
-# See the comment in config.additional_settings.toml for more details about what this does.
-COPY config.additional_settings.toml .
-RUN cat config.additional_settings.toml >> config.toml
-RUN cat config.toml
 # Check the configuration.
 RUN ./x.py check
 # Build the rust tools and the full installer.
