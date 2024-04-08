@@ -35,3 +35,5 @@ the docker container and then `docker cp` the binaries out of the container.
 You can find one here 
 [https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general](https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general)
 
+# TODO
+- Check if I still need the `tools` list in `config.toml` inserted from the `Dockerfile` in the next stable release after 1.77.1

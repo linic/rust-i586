@@ -20,7 +20,13 @@ RUN ./configure --set build.extended=true --set build.build=i686-unknown-linux-g
     --set llvm.cflags="-lz -fcf-protection=none" --set llvm.cxxflags="-lz -fcf-protection=none" \
     --set llvm.ldflags="-lz -fcf-protection=none" --set llvm.targets=X86 \
     --set llvm.download-ci-llvm=false
+# See the comment in config.additional_settings.toml for more details about what this does.
+COPY config.additional_settings.toml .
+RUN cat config.additional_settings.toml >> config.toml
+RUN cat config.toml
+# Check the configuration.
 RUN ./x.py check
+# Build the rust tools and the full installer.
 RUN PKG_CONFIG_ALLOW_CROSS=1 ./x.py dist -j $CPU_CORES 2>&1 | tee $(date --utc +%F_%H%M%S)-rust-i586-build-log.txt
 # Then if you docker compose build you'll be able to docker exec -it into it and move around or
 # docker cp files out of it.

@@ -1,0 +1,7 @@
+# Starting with 1.77.1, when extended = true is set in config.toml, miri is built. 
+# Some time after "Building tool miri" is seen in the build logs, there's an error about "could not find native static library `ffi` perhaps an -L flag is missing"i
+# I later found this thread discussing miri https://github.com/rust-lang/rust/issues/100134
+# I'm now addding the following line to config.toml from the Dockerfile.
+# An example about how to configure tools is found in config.example.toml. I may need to adjust that if the value change in the future.
+tools = ["cargo", "clippy", "rustdoc", "rustfmt", "rust-analyzer", "rust-analyzer-proc-macro-srv", "analysis", "src", "rust-demangler"]
+
