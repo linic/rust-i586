@@ -15,14 +15,16 @@ RUN git submodule update --init --recursive
 ENV CFLAGS="-march=pentium"
 ENV CXXFLAGS="-march=pentium"
 ENV RUST_BACKTRACE=full
-RUN ./configure --set build.extended=true --set build.build=i686-unknown-linux-gnu \
+# See the comment in config.additional_settings.toml for more details about why tools is set.
+RUN ./configure --set change-id=102579 \
+    --set build.extended=true --set build.build=i686-unknown-linux-gnu \
     --set build.host=i586-unknown-linux-gnu --set build.target=i586-unknown-linux-gnu \
-# See the comment in config.additional_settings.toml for more details about why tools is set here.
-    --set build.tools='["cargo", "clippy", "rustdoc", "rustfmt", "rust-analyzer", "rust-analyzer-proc-macro-srv", "analysis", "src", "rust-demangler"]' \
-    --set llvm.cflags="-lz -fcf-protection=none" --set llvm.cxxflags="-lz -fcf-protection=none" \
-    --set llvm.ldflags="-lz -fcf-protection=none" --set llvm.targets=X86 \
+    --set build.tools='cargo, clippy, rustdoc, rustfmt, rust-analyzer, rust-analyzer-proc-macro-srv, analysis, src, rust-demangler' \
+    --set llvm.cflags='-lz -fcf-protection=none' --set llvm.cxxflags='-lz -fcf-protection=none' \
+    --set llvm.ldflags='-lz -fcf-protection=none' --set llvm.targets=X86 \
     --set llvm.download-ci-llvm=false
 # Check the configuration.
+RUN cat config.toml
 RUN ./x.py check
 # Build the rust tools and the full installer.
 RUN PKG_CONFIG_ALLOW_CROSS=1 ./x.py dist -j $CPU_CORES 2>&1 | tee $(date --utc +%F_%H%M%S)-rust-i586-build-log.txt
