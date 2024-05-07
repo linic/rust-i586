@@ -25,7 +25,8 @@ RUN ./configure --set change-id=102579 \
     --set llvm.download-ci-llvm=false
 # Check the configuration.
 RUN cat config.toml
-RUN ./x.py check
+# I deactivated the RUN ./x.py check because of memory allocation of 131072 bytes failed error with rust 1.78
+# RUN ./x.py check
 # Build the rust tools and the full installer.
 RUN PKG_CONFIG_ALLOW_CROSS=1 ./x.py dist -j $CPU_CORES 2>&1 | tee $(date --utc +%F_%H%M%S)-rust-i586-build-log.txt
 # Then if you docker compose build you'll be able to docker exec -it into it and move around or
