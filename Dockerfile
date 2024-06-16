@@ -19,7 +19,7 @@ ENV RUST_BACKTRACE=full
 RUN ./configure --set change-id=102579 \
     --set build.extended=true --set build.build=i686-unknown-linux-gnu \
     --set build.host=i586-unknown-linux-gnu --set build.target=i586-unknown-linux-gnu \
-    --set build.tools='cargo, clippy, rustdoc, rustfmt, rust-analyzer, rust-analyzer-proc-macro-srv, analysis, src, rust-demangler' \
+    --set build.tools='cargo, clippy' \
     --set llvm.cflags='-lz -fcf-protection=none' --set llvm.cxxflags='-lz -fcf-protection=none' \
     --set llvm.ldflags='-lz -fcf-protection=none' --set llvm.targets=X86 \
     --set llvm.download-ci-llvm=false
