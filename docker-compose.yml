@@ -1,5 +1,11 @@
 services:
   main:
-    image: linichotmailca/rust-i586:${RUST_I586_VERSION:-latest}
-    build: .
+    build:
+      context: .
+      args:
+        - RUST_VERSION=1.85.0
+      tags:
+        - linichotmailca/rust-i586:1.85.0
+        - linichotmailca/rust-i586:latest
+      dockerfile: Dockerfile
 

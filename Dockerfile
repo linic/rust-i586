@@ -1,4 +1,6 @@
+ARG RUST_VERSION
 FROM debian:latest
+ARG RUST_VERSION
 ARG CPU_CORES=8
 WORKDIR /tmp/
 RUN apt update
@@ -8,15 +10,14 @@ RUN apt update
 COPY apt_packages.txt .
 RUN xargs apt install --yes < apt_packages.txt
 WORKDIR /
-RUN git clone https://github.com/rust-lang/rust
+RUN git clone --depth 1 --branch $RUST_VERSION https://github.com/rust-lang/rust
 WORKDIR /rust/
-RUN git checkout stable
 RUN git submodule update --init --recursive
 ENV CFLAGS="-march=pentium"
 ENV CXXFLAGS="-march=pentium"
 ENV RUST_BACKTRACE=full
 # See the comment in config.additional_settings.toml for more details about why tools is set.
-RUN ./configure --set change-id=133207 \
+RUN ./configure --set change-id=134650 \
     --set build.extended=true --set build.build=i686-unknown-linux-gnu \
     --set build.host=i586-unknown-linux-gnu --set build.target=i586-unknown-linux-gnu \
     --set build.tools='cargo, clippy' \
