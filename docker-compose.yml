@@ -3,9 +3,11 @@ services:
     build:
       context: .
       args:
-        - RUST_VERSION=1.85.0
+        - ARCHITECTURE=x86
+        - RUST_VERSION=1.86.0
+        - TCL_VERSION=16.x
       tags:
-        - linichotmailca/rust-i586:1.85.0
+        - linichotmailca/rust-i586:1.86.0
         - linichotmailca/rust-i586:latest
       dockerfile: Dockerfile
 

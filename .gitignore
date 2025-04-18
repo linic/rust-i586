@@ -1,4 +1,5 @@
 *.swp
 release/
+temp/
 *build_notes.txt
 
