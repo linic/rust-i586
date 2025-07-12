@@ -15,7 +15,7 @@ ENV CFLAGS="-march=pentium"
 ENV CXXFLAGS="-march=pentium"
 ENV RUST_BACKTRACE=full
 # See the comment in config.additional_settings.toml for more details about why tools is set.
-RUN ./configure --set change-id=136941 \
+RUN ./configure --set change-id=138986 \
     --set build.extended=true --set build.build=i686-unknown-linux-gnu \
     --set build.host=i586-unknown-linux-gnu --set build.target=i586-unknown-linux-gnu \
     --set build.tools='cargo, clippy' \
@@ -23,7 +23,7 @@ RUN ./configure --set change-id=136941 \
     --set llvm.ldflags='-lz -fcf-protection=none' --set llvm.targets=X86 \
     --set llvm.download-ci-llvm=false
 # Check the configuration.
-RUN cat config.toml
+RUN cat bootstrap.toml
 WORKDIR /home/tc/tools/
 COPY --chown=tc:staff tools/get-certificate.sh .
 RUN ./get-certificate.sh
