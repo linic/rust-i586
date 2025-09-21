@@ -15,7 +15,7 @@ ENV CFLAGS="-march=pentium"
 ENV CXXFLAGS="-march=pentium"
 ENV RUST_BACKTRACE=full
 # See the comment in config.additional_settings.toml for more details about why tools is set.
-RUN ./configure --set change-id=142379 \
+RUN ./configure --set change-id=144675 \
     --set build.extended=true --set build.build=i686-unknown-linux-gnu \
     --set build.host=i586-unknown-linux-gnu --set build.target=i586-unknown-linux-gnu \
     --set build.tools='cargo, clippy' \
@@ -29,6 +29,7 @@ COPY --chown=tc:staff tools/get-certificate.sh .
 RUN ./get-certificate.sh
 COPY --chown=tc:staff certificates/crates-io-chain.crt /home/tc/certificates/
 COPY --chown=tc:staff certificates/static-crates-io-chain.crt /home/tc/certificates/
+COPY --chown=tc:staff certificates/static-crates-io-chain2.crt /home/tc/certificates/
 COPY --chown=tc:staff certificates/github-com-chain.crt /home/tc/certificates/
 COPY --chown=tc:staff tools/compare-certificate.sh .
 RUN ./compare-certificate.sh

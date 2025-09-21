@@ -36,6 +36,17 @@ else
  cat $CERTIFICATES_PATH/static-crates-io-chain.crt
  echo "!!!!!! Obtained:"
  cat $CERTIFICATES_PATH/static-crates-io.crt
+ echo "Trying again with $CERTIFICATES_PATH/static-crates-io-chain2.crt"
+fi
+
+if diff -u -Z $CERTIFICATES_PATH/static-crates-io-chain2.crt $CERTIFICATES_PATH/static-crates-io.crt; then
+ echo "Certificates from static.crates.io match."
+else
+ echo "Certificates from static.crates.io do not match!"
+ echo "!!!!!! Expected:"
+ cat $CERTIFICATES_PATH/static-crates-io-chain2.crt
+ echo "!!!!!! Obtained:"
+ cat $CERTIFICATES_PATH/static-crates-io.crt
  exit 2
 fi
 

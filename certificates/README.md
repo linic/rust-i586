@@ -260,4 +260,4 @@ so both should be valid and if I understand correctly, this is an example of cro
 
 ## static.crates.io
 This uses the "GlobalSign Atlas R3 DV TLS CA Q4 2024" root CA which can be found on [Atlas TLS ICA Rotations](https://support.globalsign.com/atlas/atlas-tls/atlas-tls-ica-rotations)
-
+On 2025-09-20, the certificate has now root CA "GlobalSign Atlas R3 DV TLS CA 2025 Q3". I put that one in the [static-crates-io-chain2.crt](./static-crates-io-chain2.crt) file. I'm using both `static-crates-io-chain.crt` which has the previous root CA and `static-crates-io-chain2.crt` which has the new root CA. I may rotate the certificates once a new root CA appears.
