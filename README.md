@@ -1,5 +1,6 @@
 # rust-i586
-Docker image which builds the rust toolchain for i586 processors. I use it on my ThinkPad 560z with a PII (i686) which has only 64 MB of RAM.
+Rust toolchain for i586 processors. I use it on my ThinkPad 560z with a PII (i686) which has only 64 MB of RAM.
+[Docker images which built this toolchain can be found at https://hub.docker.com/r/linichotmailca/rust-i586](https://hub.docker.com/r/linichotmailca/rust-i586)
 The i586 in the name of the extension is because
 ```
 CFLAGS="-march=pentium"
