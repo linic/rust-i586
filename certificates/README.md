@@ -26,8 +26,12 @@ This means clients could validate the website certificate through either root, d
 This approach is commonly used during root CA transitions. When introducing a new root CA, the new root might issue certificates for the same intermediates as the old root. This ensures that clients trusting either the old or new root can validate certificates issued by those intermediates during the transition period.
 So while the certificate itself has just one direct issuer, cross-certificates create multiple valid trust paths, effectively giving the certificate multiple trust anchors."
 
-# 2025-04
-## index.crates.io and crates.io
+# index.crates.io and crates.io
+## 2025-11-01
+The server uses "Amazon RSA 2048 M04" as the CA. I checked using Debian 11 and Firefox that I get the same information when going at https://index.crates.io.
+The new validity is Not Before: Oct 26 00:00:00 2025 GMT, Not After : Nov 24 23:59:59 2026 GMT and the X509v3 Authority Key Identifier is keyid:1F:52:92:61:56:82:54:7F:81:66:D8:1D:3D:0A:AA:32:5C:87:DD:08.
+I got the certificate using `echo "Q" | openssl s_client -showcerts -timeout -servername index.crates.io index.crates.io:443 2>&1 | sed --quiet '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > 2025-11-01_index-crates-io.crt` and read the certificate information with `openssl x509 -in  2025-11-01_index-crates-io.crt -text -noout`. I got also the 2025-11-01_crates.io certificate in a similar way. I replaced the crates-io-chain.crt with it. I got 2025-11-01_amazon-rsa-2048-m04.pem and 2025-11-01_amazon-root-ca-1.pem using firefox. As far as I can see. Using these certificates is right.
+## 2025-04
 I could validate that [crates-io-chain.crt](./crates-io-chain.crt) taken with openssl s_client gives this root CA
 ```
 Certificate:
@@ -258,6 +262,9 @@ In the page [How to Prepare for AWS’s Move to Its Own Certificate Authority](h
 it is written that "To maintain the ubiquity of the Amazon Trust Services CA, AWS purchased the Starfield Services CA, a root found in most browsers and which has been valid since 2005. This means you shouldn’t have to take action to use the certificates issued by Amazon Trust Services"
 so both should be valid and if I understand correctly, this is an example of cross-certification.
 
-## static.crates.io
+# static.crates.io
+### 2025-11-01
+The server still uses "GlobalSign Atlas R3 DV TLS CA 2025 Q3".
+### Previously
 This uses the "GlobalSign Atlas R3 DV TLS CA Q4 2024" root CA which can be found on [Atlas TLS ICA Rotations](https://support.globalsign.com/atlas/atlas-tls/atlas-tls-ica-rotations)
 On 2025-09-20, the certificate has now root CA "GlobalSign Atlas R3 DV TLS CA 2025 Q3". I put that one in the [static-crates-io-chain2.crt](./static-crates-io-chain2.crt) file. I'm using both `static-crates-io-chain.crt` which has the previous root CA and `static-crates-io-chain2.crt` which has the new root CA. I may rotate the certificates once a new root CA appears.
