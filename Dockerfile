@@ -15,7 +15,7 @@ ENV CFLAGS="-march=pentium"
 ENV CXXFLAGS="-march=pentium"
 ENV RUST_BACKTRACE=full
 # See the comment in config.additional_settings.toml for more details about why tools is set.
-RUN ./configure --set change-id=144675 \
+RUN ./configure --set change-id=146435 \
     --set build.extended=true --set build.build=i686-unknown-linux-gnu \
     --set build.host=i586-unknown-linux-gnu --set build.target=i586-unknown-linux-gnu \
     --set build.tools='cargo, clippy' \
