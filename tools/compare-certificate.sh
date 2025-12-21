@@ -28,6 +28,17 @@ else
  exit 1
 fi
 
+if diff -u -Z $CERTIFICATES_PATH/index-crates-io-chain.crt $CERTIFICATES_PATH/index-crates-io.crt; then
+ echo "Certificates from crates.io match."
+else
+ echo "Certificates from crates.io do not match!"
+ echo "!!!!!! Expected:"
+ cat $CERTIFICATES_PATH/index-crates-io-chain.crt
+ echo "!!!!!! Obtained:"
+ cat $CERTIFICATES_PATH/index-crates-io.crt
+ exit 1
+fi
+
 if diff -u -Z $CERTIFICATES_PATH/static-crates-io-chain.crt $CERTIFICATES_PATH/static-crates-io.crt; then
  echo "Certificates from static.crates.io match."
 else

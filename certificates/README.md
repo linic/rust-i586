@@ -27,6 +27,14 @@ This approach is commonly used during root CA transitions. When introducing a ne
 So while the certificate itself has just one direct issuer, cross-certificates create multiple valid trust paths, effectively giving the certificate multiple trust anchors."
 
 # index.crates.io and crates.io
+## 2025-12-21 - 1.92.0
+I got some issues with certificates again. I copied `get-certificate.sh` in this folder to get the
+changed certificates. I don't validate manually with Firefox manually anymore. The certificates I
+used are in the repo if further validation is needed.
+After `compare-certificate.sh` worked I stil had an issue on `./x.py dist` as it would still fail
+with SSL error 60, I have no idea what changed in tinycore's tczs to cause this. The fix is to add
+the following environment variables
+`SSL_CERT_FILE=/usr/local/etc/ssl/certs/ca-certificates.crt SSL_CERT_DIR=/usr/local/etc/ssl/certs`.
 ## 2025-11-01
 The server uses "Amazon RSA 2048 M04" as the CA. I checked using Debian 11 and Firefox that I get the same information when going at https://index.crates.io.
 The new validity is Not Before: Oct 26 00:00:00 2025 GMT, Not After : Nov 24 23:59:59 2026 GMT and the X509v3 Authority Key Identifier is keyid:1F:52:92:61:56:82:54:7F:81:66:D8:1D:3D:0A:AA:32:5C:87:DD:08.
