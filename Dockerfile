@@ -26,10 +26,8 @@ RUN ./configure --set change-id=147888 \
 RUN cat bootstrap.toml
 WORKDIR /home/tc/tools/
 COPY --chown=tc:staff tools/get-certificate.sh .
-RUN echo blah
 RUN ./get-certificate.sh
 COPY --chown=tc:staff certificates/crates-io-chain.crt /home/tc/certificates/
-COPY --chown=tc:staff certificates/index-crates-io-chain.crt /home/tc/certificates/
 COPY --chown=tc:staff certificates/static-crates-io-chain.crt /home/tc/certificates/
 COPY --chown=tc:staff certificates/static-crates-io-chain2.crt /home/tc/certificates/
 COPY --chown=tc:staff certificates/github-com-chain.crt /home/tc/certificates/

@@ -36,9 +36,17 @@ with SSL error 60, I have no idea what changed in tinycore's tczs to cause this.
 the following environment variables
 `SSL_CERT_FILE=/usr/local/etc/ssl/certs/ca-certificates.crt SSL_CERT_DIR=/usr/local/etc/ssl/certs`.
 ## 2025-11-01
-The server uses "Amazon RSA 2048 M04" as the CA. I checked using Debian 11 and Firefox that I get the same information when going at https://index.crates.io.
-The new validity is Not Before: Oct 26 00:00:00 2025 GMT, Not After : Nov 24 23:59:59 2026 GMT and the X509v3 Authority Key Identifier is keyid:1F:52:92:61:56:82:54:7F:81:66:D8:1D:3D:0A:AA:32:5C:87:DD:08.
-I got the certificate using `echo "Q" | openssl s_client -showcerts -timeout -servername index.crates.io index.crates.io:443 2>&1 | sed --quiet '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > 2025-11-01_index-crates-io.crt` and read the certificate information with `openssl x509 -in  2025-11-01_index-crates-io.crt -text -noout`. I got also the 2025-11-01_crates.io certificate in a similar way. I replaced the crates-io-chain.crt with it. I got 2025-11-01_amazon-rsa-2048-m04.pem and 2025-11-01_amazon-root-ca-1.pem using firefox. As far as I can see. Using these certificates is right.
+The server uses "Amazon RSA 2048 M04" as the CA. I checked using Debian 11 and Firefox that I get
+the same information when going at https://index.crates.io.
+The new validity is Not Before: Oct 26 00:00:00 2025 GMT, Not After : Nov 24 23:59:59 2026 GMT and
+the X509v3 Authority Key Identifier is keyid:1F:52:92:61:56:82:54:7F:81:66:D8:1D:3D:0A:AA:32:5C:87:DD:08.
+I got the certificate using
+`echo "Q" | openssl s_client -showcerts -timeout -servername index.crates.io index.crates.io:443 2>&1 | sed --quiet '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > 2025-11-01_index-crates-io.crt`
+and read the certificate information with
+`openssl x509 -in  2025-11-01_index-crates-io.crt -text -noout`
+. I got also the 2025-11-01_crates.io certificate in a similar way. I replaced the
+crates-io-chain.crt with it. I got 2025-11-01_amazon-rsa-2048-m04.pem and
+2025-11-01_amazon-root-ca-1.pem using firefox. As far as I can see. Using these certificates is right.
 ## 2025-04
 I could validate that [crates-io-chain.crt](./crates-io-chain.crt) taken with openssl s_client gives this root CA
 ```

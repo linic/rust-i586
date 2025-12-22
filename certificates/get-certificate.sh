@@ -17,7 +17,6 @@
 CERTIFICATES_PATH=.
 mkdir -p $CERTIFICATES_PATH
 echo "Q" | openssl s_client -showcerts -timeout -servername crates.io crates.io:443 2>&1 | sed --quiet '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $CERTIFICATES_PATH/crates-io.crt
-echo "Q" | openssl s_client -showcerts -timeout -servername index.crates.io https://index.crates.io:443/config.json 2>&1 | sed --quiet '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $CERTIFICATES_PATH/index-crates-io.crt
 # 2025-07-12 - This gives a certificate from amazon, because it hits https://cloudfront-static.crates.io/ now
 echo "Q" | openssl s_client -showcerts -timeout -servername static.crates.io static.crates.io:443 2>&1 | sed --quiet '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $CERTIFICATES_PATH/static-crates-io.crt
 # 2025-07-12 - When downloading crates, the certificate is different.
