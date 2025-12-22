@@ -3,6 +3,14 @@ For some reason I don't know yet, cargo doesn't seem to use the certificates tha
 Here is why I have the workaround documented below. While working on the workaround, I learned some things that I documented below.
 Eventually, I would like to have cargo use the certificates already installed in tinycore and not rely on the workaround below.
 
+## Quick Summary
+Use [get-certificate.sh](./get-certificate.sh) to get the current certificates.
+Use [show-cert-info.sh](./show-cert-info.sh) to inspect the certificate.
+Rename the `*.crt` to `*-chain.crt` so they get copied to the docker image.
+
+## TODO
+- [] Check to remove the second static-crates-io-chain.crt because I don't think I need it anymore.
+
 ## Cross Certification
 I found it odd that openssl s_client and firefox do not give me the same root CA.
 
