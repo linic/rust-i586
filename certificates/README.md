@@ -7,6 +7,9 @@ Eventually, I would like to have cargo use the certificates already installed in
 Use [get-certificate.sh](./get-certificate.sh) to get the current certificates.
 Use [show-cert-info.sh](./show-cert-info.sh) to inspect the certificate.
 Rename the `*.crt` to `*-chain.crt` so they get copied to the docker image.
+Sometimes the certificate I get in my host environment is different than the one in the docker image.
+I take the obtained certificate from the docker logs and paste it in the right `-chain.crt` file
+and use a macro to in vim to remove the `#11 111.1 ` at the beginning of the lines `qqd10lq100@q`.
 
 ## TODO
 - [] Check to remove the second static-crates-io-chain.crt because I don't think I need it anymore.
