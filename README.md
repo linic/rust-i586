@@ -1,6 +1,5 @@
 # rust-i586
 Rust toolchain for i586 processors. I use it on my ThinkPad 560z with a PII (i686) which has only 64 MB of RAM.
-[Docker images which built this toolchain can be found at https://hub.docker.com/r/linichotmailca/rust-i586](https://hub.docker.com/r/linichotmailca/rust-i586)
 The i586 in the name of the extension is because
 ```
 CFLAGS="-march=pentium"
@@ -15,16 +14,28 @@ CXXFLAGS="-march=pentium"
 ```
 which can be seen in the [Dockerfile](https://github.com/linic/rust-i586/blob/main/Dockerfile). This originally comes from [Building Rust for a Pentium 2](https://ww1.thecodecache.net/projects/p2-rust/) which notes that it could theoretically make rust work on the original peniums, but there is a bug [i586-unknown-linux-gnu target generates binaries containing Intel CET opcodes which are illegal on i586 processors #93059](https://github.com/rust-lang/rust/issues/93059) and I'm not sure when or if it will be fixed or could already have been fixed.
 
+## About Artifacts
+I'm publishing the artifacts on github releases and on a partial mirror on [http://tcz.facedebouc.sbs/](http://tcz.facedebouc.sbs/).
+
+### Downloading from github releases
+See [github-release-download.sh](./tools/github-release-download.sh) `./github-release-download.sh 1.93.0`
+
+### The artifacts at [http://tcz.facedebouc.sbs/artifacts/artifacts.html](http://tcz.facedebouc.sbs/artifacts/artifacts.html) might not always download
+The artifacts at [http://tcz.facedebouc.sbs/artifacts/artifacts.html](http://tcz.facedebouc.sbs/artifacts/artifacts.html)
+can be downloaded with a script at [http://tcz.facedebouc.sbs/navigate.sh](http://tcz.facedebouc.sbs/navigate.sh).
+They may not always download because [of limitations](http://tcz.facedebouc.sbs/#limit)
+To help download them, there is a script at [http://tcz.facedebouc.sbs/navigate.sh](http://tcz.facedebouc.sbs/navigate.sh).
+
+### Docker Images
+You can find them here:
+[https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general](https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general)
+Note that they are big. Once pulled, the 1.86.0 one takes 42 GB on my computer.
+
 # Usage
 `make` does it all. Note that the build of 1.86.0 took 3 hours 8 minutes on my AMD FX-9590 with a SATA III Samsung SSD.
 
 # May also be relevant...
 - [Tiny Core Linux Forum - IBM ThinkPad 560Z Core Project Pentium II](http://forum.tinycorelinux.net/index.php/topic,26359.msg170383.html#msg170383)
-
-# Docker Images
-You can find them here:
-[https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general](https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general)
-Note that they are big. Once pulled, the 1.86.0 one takes 42 GB on my computer.
 
 # How to use this with retro computers?
 When used with the following:
