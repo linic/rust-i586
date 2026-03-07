@@ -14,7 +14,7 @@
 # manually is advised.
 ##################################################################
 
-CERTIFICATES_PATH=/home/tc/certificates
+CERTIFICATES_PATH="$1"
 mkdir -p $CERTIFICATES_PATH
 echo "Q" | openssl s_client -showcerts -timeout -servername crates.io crates.io:443 2>&1 | sed --quiet '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $CERTIFICATES_PATH/crates-io.crt
 # 2025-07-12 - This gives a certificate from amazon, because it hits https://cloudfront-static.crates.io/ now

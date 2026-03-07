@@ -27,12 +27,16 @@ They may not always download because [of limitations](http://tcz.facedebouc.sbs/
 To help download them, there is a script at [http://tcz.facedebouc.sbs/navigate.sh](http://tcz.facedebouc.sbs/navigate.sh).
 
 ### Docker Images
-You can find them here:
+Up to 1.93.1, you can find them here:
 [https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general](https://hub.docker.com/repository/docker/linichotmailca/rust-i586/general)
 Note that they are big. Once pulled, the 1.86.0 one takes 42 GB on my computer.
 
 # Usage
-`make` does it all. Note that the build of 1.86.0 took 3 hours 8 minutes on my AMD FX-9590 with a SATA III Samsung SSD.
+`make` defaults to `make build` which builds using docker.
+`make build-locally` works if you are in a 32 bits user space version of Tiny Core Linux.
+
+`make build-locally` for 1.94.0 took 4 hours 48 minutes on an AMD Phenom II X6 and an Hitachi mechanical SATA drive.
+`make build` for 1.86.0 took 3 hours 8 minutes on an AMD FX-9590 with a SATA III Samsung SSD.
 
 # May also be relevant...
 - [Tiny Core Linux Forum - IBM ThinkPad 560Z Core Project Pentium II](http://forum.tinycorelinux.net/index.php/topic,26359.msg170383.html#msg170383)

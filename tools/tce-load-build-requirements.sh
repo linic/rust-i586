@@ -10,5 +10,5 @@
 # rust-nightly-i586-unknown-linux-gnu.tar.gz
 ##################################################################
 
-tce-load -wi cmake.tcz compiletc.tcz gcc.tcz git.tcz zlib_base-dev.tcz openssl-dev.tcz openssl.tcz curl.tcz ninja.tcz python3.9.tcz
+tce-load -wi cmake.tcz compiletc.tcz coreutils.tcz gcc.tcz git.tcz zlib_base-dev.tcz openssl-dev.tcz openssl.tcz curl.tcz ninja.tcz python3.9.tcz
 

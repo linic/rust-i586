@@ -3,10 +3,12 @@ ARCHITECTURE=x86
 RUST_VERSION=1.93.1
 TCL_VERSION=17.x
 
-.PHONY: all build
+.PHONY: all build build-locally
 
 all: build
 
 build:
 	tools/build.sh ${ARCHITECTURE} ${RUST_VERSION} ${TCL_VERSION}
 
+build-locally:
+	tools/build-locally.sh ${RUST_VERSION}

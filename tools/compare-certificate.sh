@@ -16,7 +16,7 @@
 # https://github.com/linic/rust-i586/certificates/crates-io-chain.crt
 ##################################################################
 
-CERTIFICATES_PATH=/home/tc/certificates
+CERTIFICATES_PATH="$1"
 if diff -u -Z $CERTIFICATES_PATH/crates-io-chain.crt $CERTIFICATES_PATH/crates-io.crt; then
  echo "Certificates from crates.io match."
 else

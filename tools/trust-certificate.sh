@@ -12,7 +12,7 @@
 # certificates.
 ##################################################################
 
-CERTIFICATES_PATH=/home/tc/certificates
+CERTIFICATES_PATH="$1"
 export SSL_CERT_FILE=$CERTIFICATES_PATH/cargo-certificates.crt
 export CARGO_HTTP_CAINFO=$CERTIFICATES_PATH/cargo-certificates.crt
 cd $CERTIFICATES_PATH
