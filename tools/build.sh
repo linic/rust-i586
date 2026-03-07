@@ -10,8 +10,8 @@
 # it out of the docker container.
 ##################################################################
 
-PARAMETER_ERROR_MESSAGE="ARCHITECTURE RUST_VERSION TCL_VERSION are required. For example: ./build.sh x86 1.86.0 16.x"
-if [ ! $# -eq 3 ]; then
+PARAMETER_ERROR_MESSAGE="ARCHITECTURE CHANGE_ID CPU_CORES RUST_VERSION TCL_VERSION are required. For example: ./build.sh x86 148671 8 1.94.0 17.x"
+if [ ! $# -eq 5 ]; then
   echo $PARAMETER_ERROR_MESSAGE
   exit 1
 fi
@@ -20,8 +20,10 @@ if [ $ARCHITECTURE != "x86" ]; then
   echo "ARCHITECTURE can only be x86 for now."
   exit 2
 fi
-RUST_VERSION=$2
-TCL_VERSION=$3
+CHANGE_ID=$2
+CPU_CORES=$3
+RUST_VERSION=$4
+TCL_VERSION=$5
 
 if [ ! -f docker-compose.yml ] || ! grep -q "$RUST_VERSION" docker-compose.yml || ! grep -q "$TCL_VERSION" docker-compose.yml; then
   echo "Did not find $RUST_VERSION in docker-compose.yml. Rewriting docker-compose.yml."
@@ -31,6 +33,8 @@ if [ ! -f docker-compose.yml ] || ! grep -q "$RUST_VERSION" docker-compose.yml |
     "     context: .\n"\
     "     args:\n"\
     "       - ARCHITECTURE=$ARCHITECTURE\n"\
+    "       - CHANGE_ID=$CHANGE_ID\n"\
+    "       - CPU_CORES=$CPU_CORES\n"\
     "       - RUST_VERSION=$RUST_VERSION\n"\
     "       - TCL_VERSION=$TCL_VERSION\n"\
     "     tags:\n"\

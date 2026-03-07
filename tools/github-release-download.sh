@@ -1,5 +1,5 @@
 #!/bin/sh
-wget https://github.com/linic/rust-i586/releases/download/$1/rust-$1-2026-01-31_111117-rust-i586-build-log.txt
+wget https://github.com/linic/rust-i586/releases/download/$1/rust-$1-i586-build-log.txt
 wget https://github.com/linic/rust-i586/releases/download/$1/rust-$1-i586-unknown-linux-gnu.tar.gz
 wget https://github.com/linic/rust-i586/releases/download/$1/rust-$1-i586-unknown-linux-gnu.tar.gz.bootstrap.toml
 wget https://github.com/linic/rust-i586/releases/download/$1/rust-$1-i586-unknown-linux-gnu.tar.gz.md5.txt

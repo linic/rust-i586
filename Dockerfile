@@ -1,7 +1,10 @@
 ARG ARCHITECTURE
+ARG CHANGE_ID
 ARG RUST_VERSION
 ARG TCL_VERSION
+ARG CHANGE_ID
 FROM linichotmailca/tcl-core-x86:$TCL_VERSION-$ARCHITECTURE
+ARG CHANGE_ID
 ARG RUST_VERSION
 ARG CPU_CORES=8
 WORKDIR /home/tc/tools/
@@ -15,7 +18,7 @@ ENV CFLAGS="-march=pentium"
 ENV CXXFLAGS="-march=pentium"
 ENV RUST_BACKTRACE=full
 # See the comment in config.additional_settings.toml for more details about why tools is set.
-RUN ./configure --set change-id=148795 \
+RUN ./configure --set change-id=$CHANGE_ID \
     --set build.extended=true --set build.build=i686-unknown-linux-gnu \
     --set build.host=i586-unknown-linux-gnu --set build.target=i586-unknown-linux-gnu \
     --set build.tools='cargo, clippy' \

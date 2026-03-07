@@ -4,15 +4,16 @@ Here is why I have the workaround documented below. While working on the workaro
 Eventually, I would like to have cargo use the certificates already installed in tinycore and not rely on the workaround below.
 
 ## Quick Summary
-Use [get-certificate.sh](./get-certificate.sh) to get the current certificates.
-Use [show-cert-info.sh](./show-cert-info.sh) to inspect the certificate.
+Use [get-certificate.sh](../tools/get-certificate.sh) to get the current certificates.
+Use [show-cert-info.sh](../tools/show-cert-info.sh) to inspect the certificate.
 Rename the `*.crt` to `*-chain.crt` so they get copied to the docker image.
+
 Sometimes the certificate I get in my host environment is different than the one in the docker image.
 I take the obtained certificate from the docker logs and paste it in the right `-chain.crt` file
 and use a macro to in vim to remove the `#11 111.1 ` at the beginning of the lines `qqd10lq100@q`.
 
-## TODO
-- [] Check to remove the second static-crates-io-chain.crt because I don't think I need it anymore.
+When running the build locally on a machine where Tiny Core Linux is installed, this should be
+less problematic. We'll see...
 
 ## Cross Certification
 I found it odd that openssl s_client and firefox do not give me the same root CA.
@@ -144,10 +145,10 @@ openssl dgst -sha256 amazon-root-ca1-via-openssl.crt.key
 which results in `fbe3018031f9586bcbf41727e417b7d1c45c2f47f93be372a17b96b50757d5a2`.
 which matches the [Amazon Root CA 1 of the Amazon Trust Services page](https://www.amazontrust.com/repository/).
 
-I put in the certificates folder:
-- [AmazonRootCA1.pem](./AmazonRootCA1.pem) which I took from [the Amazon Trust Services page](https://www.amazontrust.com/repository/) 
-- [amazon-root-ca1-via-openssl.crt](./amazon-root-ca1-via-openssl.crt) which I got from openssl s_client
-- [amazon-root-ca1-via-firefox.crt](./amazon-root-ca1-via-firefox.crt) which I got from manually inspecting the certificate with firefox.
+I had put in the certificates folder:
+- `AmazonRootCA1.pem` which I took from [the Amazon Trust Services page](https://www.amazontrust.com/repository/) 
+- `amazon-root-ca1-via-openssl.crt` which I got from openssl s_client
+- `amazon-root-ca1-via-firefox.crt` which I got from manually inspecting the certificate with firefox.
 Using `diff -u -Z certificates/AmazonRootCA1.pem certificates/amazon-root-ca1-via-firefox.crt` certs are matching.
 Using `diff -u -Z certificates/AmazonRootCA1.pem certificates/amazon-root-ca1-via-openssl.crt` certs are different.
 

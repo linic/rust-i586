@@ -9,7 +9,7 @@ usage()
 {
   echo "usage"
   REQUIRED_ARGUMENTS="RUST_VERSION (see makefile)"
-  CALL_EXAMPLE="./build-locally.sh 1.94.0"
+  CALL_EXAMPLE="./build-locally.sh 1.94.0 148671 6"
   echo "$REQUIRED_ARGUMENTS"
   echo "For example: $CALL_EXAMPLE"
   echo "Note: consider running this in tmux to easily fix issues."
@@ -30,7 +30,7 @@ build()
   export CXXFLAGS="-march=pentium"
   export RUST_BACKTRACE=full
   # See the comment in config.additional_settings.toml for more details about why tools is set.
-  ./configure --set change-id=148795 \
+  ./configure --set change-id=$CHANGE_ID \
     --set build.extended=true --set build.build=i686-unknown-linux-gnu \
     --set build.host=i586-unknown-linux-gnu --set build.target=i586-unknown-linux-gnu \
     --set build.tools='cargo, clippy' \
@@ -64,22 +64,28 @@ build()
 
 main()
 {
-  if [ $# -lt 1 ]; then
+  if [ ! $# -eq 3 ]; then
     usage "$@"
     exit "$?"
   fi
   
   RUST_VERSION="$1"
-  CPU_CORES=6
+  CHANGE_ID="$2"
+  CPU_CORES="$3"
   COMPILE_DIR="/home/tc/rust-$RUST_VERSION"
   RUST_GIT_DIR="$COMPILE_DIR/rust"
   mkdir -pv "$COMPILE_DIR"
 
   # Only copy if we are not in the $COMPILE_DIR because we're likely in the git dir.
   if [ "$PWD" != "$COMPILE_DIR" ]; then
-    cp -rv * "$COMPILE_DIR/"
-    cp -rv ../certificates/* "$COMPILE_DIR/"
+    cp -rv tools/* "$COMPILE_DIR/"
+    cp -rv certificates/* "$COMPILE_DIR/"
     sudo chown tc:staff *
+    echo "Required files have been copied to $COMPILE_DIR"
+    echo "#!/bin/sh" >> "$COMPILE_DIR/retry.sh"
+    echo "./build-locally.sh $RUST_VERSION $CHANGE_ID $CPU_CORES" >> "$COMPILE_DIR/retry.sh"
+    chmod +x "$COMPILE_DIR/retry.sh"
+    echo "If the build was to fail, retry it running $COMPILE_DIR/retry.sh"
   fi
 
   cd "$COMPILE_DIR"
