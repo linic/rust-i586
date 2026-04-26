@@ -7,6 +7,12 @@ FROM linichotmailca/tcl-core-x86:$TCL_VERSION-$ARCHITECTURE
 ARG CHANGE_ID
 ARG RUST_VERSION
 ARG CPU_CORES=8
+# The base image sets USER tc, but the 17.x image has /tmp without world-write
+# and sudo without its SUID bit, which breaks tce-load. Fix both as root before
+# switching back to tc for the rest of the build.
+USER root
+RUN chmod 1777 /tmp && chown -R tc:staff /tmp/tce /tmp/tcloop && chmod u+s /usr/bin/sudo
+USER tc
 WORKDIR /home/tc/tools/
 COPY --chown=tc:staff tools/tce-load-build-requirements.sh .
 RUN ./tce-load-build-requirements.sh
