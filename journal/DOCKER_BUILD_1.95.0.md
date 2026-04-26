@@ -36,7 +36,7 @@ Known bugs spotted while reading (before touching anything):
 - [x] Verify x.py dist proceeds past cargo SSL errors (confirmed in build r5)
 - [ ] Confirm x.py dist completes fully end-to-end (build r5 in progress — compiling stage1)
 - [ ] Update CHANGE_ID from build logs
-- [ ] Investigate remaining cert friction; write `CERTIFICATES_FRICTION_REMOVAL_PLAN.md` if non-trivial
+- [x] Investigate remaining cert friction; write `journal/CERTIFICATES_FRICTION_REMOVAL_PLAN.md` — drafted, pending discussion
 - [ ] Push Docker image (after Nic confirms)
 
 ## Log
