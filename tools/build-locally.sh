@@ -72,7 +72,7 @@ main()
   RUST_VERSION="$1"
   CHANGE_ID="$2"
   CPU_CORES="$3"
-  COMPILE_DIR="/home/tc/rust-$RUST_VERSION"
+  COMPILE_DIR="/home/tc/rust-$RUST_VERSION-i586"
   RUST_GIT_DIR="$COMPILE_DIR/rust"
   mkdir -pv "$COMPILE_DIR"
 
