@@ -110,11 +110,48 @@ notAfter =Jun  3 23:59:59 2026 GMT   ← valid
 openssl x509 -in certificates/crates-io-chain.crt -noout -subject -dates -issuer
 ```
 
-**Results:** (from 2026-04-26 build — "Certificates from crates.io match")
-- The committed `crates-io-chain.crt` matched the live cert.
-- (Detailed dates to be added after running the command above)
+**Results:** (from 2026-04-26)
+- Build r2: crates.io MATCHED (old Amazon cert still served as of build r2)
+- Build r4: crates.io did NOT match — cert rotated between r2 and r4
 
-**Findings:** Pending full inspection, but the build confirmed a match as of 2026-04-26.
+Chain before rotation (committed Mar 5, 2026):
+```
+Leaf: CN=crates.io, issuer=Amazon RSA 2048 M04, valid Jan 16 2026 – Feb 14 2027
+```
+
+Chain after rotation (current as of Apr 26, 2026):
+```
+Leaf: CN=crates.io, issuer=GlobalSign Atlas R3 DV TLS CA 2025 Q4, valid Jan 15 2026 – Feb 16 2027
+```
+
+**Findings:**
+- crates.io switched from Amazon RSA 2048 M04 to **GlobalSign Atlas R3 DV TLS CA 2025 Q4**, same as index.crates.io.
+- Both crates.io and index.crates.io now use the same CA family. GlobalSign Root CA - R3 covers both.
+- The rotation from Amazon to GlobalSign happened sometime between Mar 5 and Apr 26, 2026 — possibly coordinated with the index.crates.io change.
+- The old `crates-io-chain.crt` had 3 certs (Amazon leaf + M04 intermediate + Amazon Root CA 1). New chain has 2 certs (leaf + Q4 intermediate); the GlobalSign root is now handled by `globalsign-root-ca-r3.crt`.
+
+---
+
+---
+
+## Experiment 5 - Is GlobalSign Root CA R3 in the TCL ca-certificates bundle?
+
+**Hypothesis:** `ca-certificates.tcz` DOES include GlobalSign Root CA - R3 (it's in Mozilla's trust store and most distros ship it). If so, after `trust-certificate.sh` runs `update-ca-certificates`, the system bundle `/usr/local/etc/ssl/certs/ca-certificates.crt` has it — but CARGO_HTTP_CAINFO overrides the system store entirely, which is why cargo can't use it.
+
+**Commands:** (run inside TCL container with ca-certificates installed)
+```sh
+# After tce-load installs ca-certificates.tcz:
+grep -c "BEGIN CERTIFICATE" /usr/local/etc/ssl/certs/ca-certificates.crt
+# Check if GlobalSign Root CA R3 is present in system bundle:
+openssl crl2pkcs7 -nocrl -certfile /usr/local/etc/ssl/certs/ca-certificates.crt \
+  | openssl pkcs7 -print_certs -noout 2>/dev/null | grep "GlobalSign Root CA - R3"
+```
+
+**Results:** Not yet verified directly; indirect evidence from build logs: tce-load installs ca-certificates.tcz successfully (146 certs added). The R3 root is a standard Mozilla-included cert so very likely present.
+
+**Findings:** Pending direct confirmation. The root cause of cargo not using system certs is clearly that CARGO_HTTP_CAINFO is set to a custom bundle — that replaces the system store. As long as CARGO_HTTP_CAINFO is set, cargo ignores system certs. This is the designed behaviour.
+
+**Implication for friction reduction:** Rather than maintaining a custom bundle of individual server certs, we could set `CARGO_HTTP_CAINFO` to the system bundle (`/usr/local/etc/ssl/certs/ca-certificates.crt`) after `update-ca-certificates` has run. That would let cargo trust any standard cert without manual maintenance. See CERTIFICATES_FRICTION_REMOVAL_PLAN.md for this proposal.
 
 ---
 
