@@ -28,10 +28,4 @@ cat $CERTIFICATES_PATH/static-crates-io.crt >> $CERTIFICATES_PATH/cargo-certific
 cat $CERTIFICATES_PATH/static-crates-io-download.crt >> $CERTIFICATES_PATH/cargo-certificates.crt
 cat $CERTIFICATES_PATH/github-com.crt >> $CERTIFICATES_PATH/cargo-certificates.crt
 #cat $CERTIFICATES_PATH/index-crates-io.crt >> $CERTIFICATES_PATH/cargo-certificates.crt
-# index.crates.io switched from Amazon to GlobalSign in early 2026. Both index.crates.io and
-# static.crates.io share GlobalSign Root CA - R3 as their ultimate trust anchor but neither
-# server sends the root in its chain. Include it explicitly so cargo can build a complete path.
-if [ -f "$CERTIFICATES_PATH/globalsign-root-ca-r3.crt" ]; then
-  cat "$CERTIFICATES_PATH/globalsign-root-ca-r3.crt" >> $CERTIFICATES_PATH/cargo-certificates.crt
-fi
 

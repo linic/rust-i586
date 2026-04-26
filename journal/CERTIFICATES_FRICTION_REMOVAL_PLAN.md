@@ -87,7 +87,7 @@ openssl crl2pkcs7 -nocrl -certfile /usr/local/etc/ssl/certs/ca-certificates.crt 
 
 ## Status
 
-- [ ] Discuss with Nic
-- [ ] Implement (one commit: Dockerfile + get-certificate.sh + delete globalsign-root-ca-r3.crt)
-- [ ] Build verification
+- [x] Discuss with Nic — agreed 2026-04-26
+- [x] Implement (Dockerfile + get-certificate.sh + delete globalsign-root-ca-r3.crt) — committed 2026-04-26
+- [ ] Build verification (build r6 pending — r5 still running, will be the first build to use system bundle)
 - [ ] Merge

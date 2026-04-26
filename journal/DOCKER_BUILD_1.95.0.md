@@ -36,7 +36,7 @@ Known bugs spotted while reading (before touching anything):
 - [x] Verify x.py dist proceeds past cargo SSL errors (confirmed in build r5)
 - [ ] Confirm x.py dist completes fully end-to-end (build r5 in progress — compiling stage1)
 - [ ] Update CHANGE_ID from build logs
-- [x] Investigate remaining cert friction; write `journal/CERTIFICATES_FRICTION_REMOVAL_PLAN.md` — drafted, pending discussion
+- [x] Investigate remaining cert friction; write `journal/CERTIFICATES_FRICTION_REMOVAL_PLAN.md` — implemented 2026-04-26
 - [ ] Push Docker image (after Nic confirms)
 
 ## Log
@@ -72,6 +72,22 @@ Build r5: all cert issues resolved.
 - At ~108s: `Building stage1 unstable-book-gen` — multi-hour Rust compilation underway
 
 Build r5 is currently running. CHANGE_ID and final success pending.
+
+### 2026-04-26 — Friction removal implemented; tcl-core-rust-i586 scouted
+
+Nic approved the plan. Implemented as one change:
+- `Dockerfile`: removed `COPY certificates/globalsign-root-ca-r3.crt` and the `cp …` pre-step; changed `ENV CARGO_HTTP_CAINFO` from `$COMPILE_DIR/cargo-certificates.crt` to `/usr/local/etc/ssl/certs/ca-certificates.crt`
+- `tools/get-certificate.sh`: removed the globalsign root CA append block
+- Deleted `certificates/globalsign-root-ca-r3.crt`
+
+This takes effect starting build r6. Build r5 (current) used the old approach and already proved the certs work.
+
+Also scouted `tcl-core-rust-i586` (the companion repo that repackages the Rust toolchain into `.tcz` files). Key findings for the next step:
+- Dockerfile pulls `linichotmailca/rust-i586:$RUST_VERSION` as a resource image → rust-i586 must be pushed first
+- Makefile still has `RUST_VERSION=1.93.1` — needs updating to 1.95.0
+- `generate-rust-tczs.sh` calls `main "$@"` twice at the end (lines 86, 88) — bug
+- Dockerfile uses the same `17.x-x86` base image and will need the same USER root / chmod / chown fixes
+- Changelog is current through `1.93.0 → 1.93.1` (2026/03/06); next entry will be `→ 1.95.0`
 
 ## Clarifying questions for Nic
 

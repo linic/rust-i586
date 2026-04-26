@@ -36,11 +36,8 @@ RUN ./configure --set change-id=$CHANGE_ID \
 RUN cat bootstrap.toml
 WORKDIR /home/tc/tools/
 ENV COMPILE_DIR="/home/tc/rust-$RUST_VERSION"
-COPY --chown=tc:staff certificates/globalsign-root-ca-r3.crt /home/tc/certificates/
 COPY --chown=tc:staff tools/get-certificate.sh .
-RUN mkdir -p $COMPILE_DIR \
-    && cp /home/tc/certificates/globalsign-root-ca-r3.crt $COMPILE_DIR/ \
-    && ./get-certificate.sh $COMPILE_DIR
+RUN mkdir -p $COMPILE_DIR && ./get-certificate.sh $COMPILE_DIR
 COPY --chown=tc:staff certificates/crates-io-chain.crt /home/tc/certificates/
 COPY --chown=tc:staff certificates/static-crates-io-chain.crt /home/tc/certificates/
 COPY --chown=tc:staff certificates/github-com-chain.crt /home/tc/certificates/
@@ -48,7 +45,7 @@ COPY --chown=tc:staff tools/compare-certificate.sh .
 RUN cp /home/tc/certificates/*-chain.crt $COMPILE_DIR/ && ./compare-certificate.sh $COMPILE_DIR
 COPY --chown=tc:staff tools/trust-certificate.sh .
 RUN /home/tc/tools/trust-certificate.sh $COMPILE_DIR
-ENV CARGO_HTTP_CAINFO=$COMPILE_DIR/cargo-certificates.crt
+ENV CARGO_HTTP_CAINFO=/usr/local/etc/ssl/certs/ca-certificates.crt
 WORKDIR /home/tc/rust/
 # I deactivated the RUN ./x.py check because of memory allocation of 131072 bytes failed error with rust 1.78
 # RUN ./x.py check
