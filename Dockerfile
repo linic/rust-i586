@@ -38,7 +38,9 @@ WORKDIR /home/tc/tools/
 ENV COMPILE_DIR="/home/tc/rust-$RUST_VERSION"
 COPY --chown=tc:staff certificates/globalsign-root-ca-r3.crt /home/tc/certificates/
 COPY --chown=tc:staff tools/get-certificate.sh .
-RUN cp /home/tc/certificates/globalsign-root-ca-r3.crt $COMPILE_DIR/ && ./get-certificate.sh $COMPILE_DIR
+RUN mkdir -p $COMPILE_DIR \
+    && cp /home/tc/certificates/globalsign-root-ca-r3.crt $COMPILE_DIR/ \
+    && ./get-certificate.sh $COMPILE_DIR
 COPY --chown=tc:staff certificates/crates-io-chain.crt /home/tc/certificates/
 COPY --chown=tc:staff certificates/static-crates-io-chain.crt /home/tc/certificates/
 COPY --chown=tc:staff certificates/github-com-chain.crt /home/tc/certificates/
