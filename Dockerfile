@@ -11,7 +11,8 @@ ARG CPU_CORES=8
 # and sudo without its SUID bit, which breaks tce-load. Fix both as root before
 # switching back to tc for the rest of the build.
 USER root
-RUN chmod 1777 /tmp && chown -R tc:staff /tmp/tce /tmp/tcloop && chmod u+s /usr/bin/sudo
+RUN chmod 1777 /tmp && chown -R tc:staff /tmp/tce /tmp/tcloop && chmod u+s /usr/bin/sudo \
+    && chown tc:staff /home/tc
 USER tc
 WORKDIR /home/tc/tools/
 COPY --chown=tc:staff tools/tce-load-build-requirements.sh .
