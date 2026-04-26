@@ -33,13 +33,12 @@ COPY --chown=tc:staff tools/get-certificate.sh .
 RUN ./get-certificate.sh $COMPILE_DIR
 COPY --chown=tc:staff certificates/crates-io-chain.crt /home/tc/certificates/
 COPY --chown=tc:staff certificates/static-crates-io-chain.crt /home/tc/certificates/
-COPY --chown=tc:staff certificates/static-crates-io-chain2.crt /home/tc/certificates/
 COPY --chown=tc:staff certificates/github-com-chain.crt /home/tc/certificates/
 COPY --chown=tc:staff tools/compare-certificate.sh .
-RUN ./compare-certificate.sh $COMPILE_DIR
+RUN cp /home/tc/certificates/*-chain.crt $COMPILE_DIR/ && ./compare-certificate.sh $COMPILE_DIR
 COPY --chown=tc:staff tools/trust-certificate.sh .
 RUN /home/tc/tools/trust-certificate.sh $COMPILE_DIR
-ENV CARGO_HTTP_CAINFO=/home/tc/certificates/cargo-certificates.crt
+ENV CARGO_HTTP_CAINFO=$COMPILE_DIR/cargo-certificates.crt
 WORKDIR /home/tc/rust/
 # I deactivated the RUN ./x.py check because of memory allocation of 131072 bytes failed error with rust 1.78
 # RUN ./x.py check
