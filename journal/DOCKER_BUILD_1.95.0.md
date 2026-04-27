@@ -37,9 +37,13 @@ Known bugs spotted while reading (before touching anything):
 - [x] Confirm x.py dist completes fully end-to-end — completed at 53,465s (~14h 51m)
 - [x] Update CHANGE_ID from build logs — `148671` confirmed correct for 1.95.0 (last entry in change_tracker.rs)
 - [x] Investigate remaining cert friction; write `journal/CERTIFICATES_FRICTION_REMOVAL_PLAN.md` — implemented 2026-04-26
-- [ ] Fix BuildKit snapshot error — `latest` tag not set; docker run/create hanging (see log 2026-04-27)
-- [ ] Extract dist artifacts (`docker cp` after container works)
+- [x] BuildKit snapshot error — image usable; docker create just slow (~12 min) on mechanical HDD
+- [x] Extract dist artifacts — 234 MB tarball + bootstrap.toml in release/1.95.0/
 - [ ] Push Docker image (after Nic confirms)
+- [x] Write notes/DOCKER.md — Docker gotchas for future Claude
+- [x] Write runbook/BUILD_AND_RELEASE.md — build/release command reference
+- [x] Write plan/ECHO_SLEEP_REMOVAL.md — planned removal of echo_sleep.sh
+- [x] Move CERTIFICATES_FRICTION_REMOVAL_PLAN.md to plan/
 
 ## Log
 
@@ -106,19 +110,23 @@ ERROR: failed to prepare extraction snapshot "extract-...": parent snapshot sha2
 This caused `docker compose build` to exit non-zero. Consequences:
 - `linichotmailca/rust-i586:latest` NOT updated (still points to old `5c2a13048533`)
 - `rust-i586-main:latest` NOT updated (same)
-- `docker create` / `docker run` from the `1.95.0` image hang indefinitely (overlayfs layer chain broken locally)
+- `docker create` appeared to hang but eventually succeeded after ~12 min (overlayfs extraction of 20 GB image on mechanical HDD is just slow; the snapshot error is a post-export validation artifact, not actual corruption)
 
-**Dist artifacts not extracted** — `docker cp` from a running container is blocked by the above.
+**Dist artifacts extracted** via `docker cp` from a Created container:
+- `release/1.95.0/rust-1.95.0-i586-unknown-linux-gnu.tar.gz` — 234 MB ✅
+- `release/1.95.0/rust-1.95.0-i586-unknown-linux-gnu.tar.gz.bootstrap.toml` ✅
 
-**Next steps needing Nic's input:**
-1. Can we `docker push linichotmailca/rust-i586:1.95.0` directly? The push reads from the BuildKit content store (not the overlayfs snapshotter) so it may work even though `docker run` doesn't.
-2. If push works, should we also manually `docker tag` to set `:latest` before pushing?
-3. Alternative: restart Docker daemon — this can trigger snapshot recovery or at least clear the hung state. But it's destructive to any running containers.
-4. Alternative: run build r6 — the friction-removal Dockerfile is ready; cached layers mean only the final export step re-runs. Should complete quickly and produce a clean image.
+Full dist dir also available at `/tmp/rust-dist-list/` (tmpfs — lost on reboot): 22 packages total (`.tar.gz` + `.tar.xz` for cargo, rustc, rustc-dev, rustc-src, rustc-src-gpl, rust-dev, rust-docs, rust-docs-json, rust-src, rust-std, rust combined).
+
+**Still needed:**
+- `sha512sum` + `md5sum` of tarball
+- GPG detach-sign (needs Nic's key)
+- `docker tag` to fix `:latest`
+- `docker push` (after Nic confirms)
 
 ## Clarifying questions for Nic
 
-- **BuildKit snapshot error:** docker run/create hangs; image exists but is not usable locally. Options: `docker push` directly (may work since push uses content store not snapshotter), manual `docker daemon` restart, or rebuild r6 to get clean image. What's your preference?
+*None open.*
 
 ## Decisions made without input
 

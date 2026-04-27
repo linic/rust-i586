@@ -75,7 +75,7 @@ Servers rotate their leaf certificates roughly every 3 months. When `compare-cer
 
 ### Why not use TCL system certs directly?
 
-`ca-certificates.tcz` is installed during the build and contains ~146 standard root CAs. `update-ca-certificates` populates `/usr/local/etc/ssl/certs/ca-certificates.crt`. The `SSL_CERT_FILE` variable works for x.py (Python), but cargo ignores it — only `CARGO_HTTP_CAINFO` applies to cargo. Pointing `CARGO_HTTP_CAINFO` to the system bundle (after `update-ca-certificates` has merged our custom certs into it) is the solution adopted since 2026-04-26. See `journal/CERTIFICATES_FRICTION_REMOVAL_PLAN.md` for the full analysis.
+`ca-certificates.tcz` is installed during the build and contains ~146 standard root CAs. `update-ca-certificates` populates `/usr/local/etc/ssl/certs/ca-certificates.crt`. The `SSL_CERT_FILE` variable works for x.py (Python), but cargo ignores it — only `CARGO_HTTP_CAINFO` applies to cargo. Pointing `CARGO_HTTP_CAINFO` to the system bundle (after `update-ca-certificates` has merged our custom certs into it) is the solution adopted since 2026-04-26. See `plan/CERTIFICATES_FRICTION_REMOVAL_PLAN.md` for the full analysis.
 
 ## Related projects
 
