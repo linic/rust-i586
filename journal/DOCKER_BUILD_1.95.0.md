@@ -34,9 +34,11 @@ Known bugs spotted while reading (before touching anything):
 - [x] Fix missing GlobalSign Root CA R3 in cargo bundle (index.crates.io switched from Amazon to GlobalSign in early 2026)
 - [x] Fix crates.io cert (switched from Amazon RSA 2048 M04 to GlobalSign Atlas Q4 between Mar 5 and Apr 26)
 - [x] Verify x.py dist proceeds past cargo SSL errors (confirmed in build r5)
-- [ ] Confirm x.py dist completes fully end-to-end (build r5 in progress — compiling stage1)
-- [ ] Update CHANGE_ID from build logs
+- [x] Confirm x.py dist completes fully end-to-end — completed at 53,465s (~14h 51m)
+- [x] Update CHANGE_ID from build logs — `148671` confirmed correct for 1.95.0 (last entry in change_tracker.rs)
 - [x] Investigate remaining cert friction; write `journal/CERTIFICATES_FRICTION_REMOVAL_PLAN.md` — implemented 2026-04-26
+- [ ] Fix BuildKit snapshot error — `latest` tag not set; docker run/create hanging (see log 2026-04-27)
+- [ ] Extract dist artifacts (`docker cp` after container works)
 - [ ] Push Docker image (after Nic confirms)
 
 ## Log
@@ -71,7 +73,7 @@ Build r5: all cert issues resolved.
 - At ~100s: `Finished dev profile [unoptimized] target(s) in 1m 09s` — bootstrap compiled ✓
 - At ~108s: `Building stage1 unstable-book-gen` — multi-hour Rust compilation underway
 
-Build r5 is currently running. CHANGE_ID and final success pending.
+Build r5 completed. CHANGE_ID confirmed below.
 
 ### 2026-04-26 — Friction removal implemented; tcl-core-rust-i586 scouted
 
@@ -89,9 +91,34 @@ Also scouted `tcl-core-rust-i586` (the companion repo that repackages the Rust t
 - Dockerfile uses the same `17.x-x86` base image and will need the same USER root / chmod / chown fixes
 - Changelog is current through `1.93.0 → 1.93.1` (2026/03/06); next entry will be `→ 1.95.0`
 
+### 2026-04-27 — Build r5 complete; BuildKit snapshot error blocks container use
+
+x.py dist completed at **53,465s** (~14h 51m, started 08:42 EDT Apr 26).
+
+**CHANGE_ID confirmed:** `148671` is correct for 1.95.0. Verified against `src/bootstrap/src/utils/change_tracker.rs` at tag `1.95.0` — it is the last entry in `CONFIG_CHANGE_HISTORY` (line 610). No Makefile or docker-compose.yml update needed.
+
+**Image created:** `linichotmailca/rust-i586:1.95.0` → `e788fd9340a6`, 20.9 GB, created 2026-04-26 23:35:29 EDT.
+
+**BuildKit snapshot error:** At the end of step `#31 exporting to image`, after naming and unpacking `1.95.0` successfully, BuildKit printed:
+```
+ERROR: failed to prepare extraction snapshot "extract-...": parent snapshot sha256:f17c... does not exist: not found
+```
+This caused `docker compose build` to exit non-zero. Consequences:
+- `linichotmailca/rust-i586:latest` NOT updated (still points to old `5c2a13048533`)
+- `rust-i586-main:latest` NOT updated (same)
+- `docker create` / `docker run` from the `1.95.0` image hang indefinitely (overlayfs layer chain broken locally)
+
+**Dist artifacts not extracted** — `docker cp` from a running container is blocked by the above.
+
+**Next steps needing Nic's input:**
+1. Can we `docker push linichotmailca/rust-i586:1.95.0` directly? The push reads from the BuildKit content store (not the overlayfs snapshotter) so it may work even though `docker run` doesn't.
+2. If push works, should we also manually `docker tag` to set `:latest` before pushing?
+3. Alternative: restart Docker daemon — this can trigger snapshot recovery or at least clear the hung state. But it's destructive to any running containers.
+4. Alternative: run build r6 — the friction-removal Dockerfile is ready; cached layers mean only the final export step re-runs. Should complete quickly and produce a clean image.
+
 ## Clarifying questions for Nic
 
-*None open.*
+- **BuildKit snapshot error:** docker run/create hangs; image exists but is not usable locally. Options: `docker push` directly (may work since push uses content store not snapshotter), manual `docker daemon` restart, or rebuild r6 to get clean image. What's your preference?
 
 ## Decisions made without input
 
